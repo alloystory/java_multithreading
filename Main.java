@@ -1,3 +1,7 @@
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class Main {
   public static void main(String[] args) {
     // runSimpleMultithreadExtendsThread();
@@ -7,7 +11,8 @@ public class Main {
     // runInstanceLockExample();
     // runUserThreadExample();
     // runDaemonThreadExampleNoJoin();
-    runDaemonThreadExampleWithJoin();
+    // runDaemonThreadExampleWithJoin();
+    runThreadPoolExample();
   }
 
   public static void runSimpleMultithreadExtendsThread() {
@@ -144,5 +149,16 @@ public class Main {
       daemonThread.join();
     } catch (InterruptedException e) {
     }
+  }
+
+  public static void runThreadPoolExample() {
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+    for (int i = 0; i < 50; i++) {
+      Future future = executor.submit(new ThreadPoolTask(i));
+
+      if (i % 2 == 0)
+        future.cancel(false);
+    }
+    executor.shutdown();
   }
 }
