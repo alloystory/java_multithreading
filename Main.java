@@ -3,7 +3,8 @@ public class Main {
 
   public static void main(String[] args) {
     // runSimpleMultithreadExtendsThread();
-    runSimpleMultithreadImplementsRunnable();
+    // runSimpleMultithreadImplementsRunnable();
+    runSimpleMultithreadReturnsRunnable();
   }
 
   public static void runSimpleMultithreadExtendsThread() {
@@ -18,6 +19,15 @@ public class Main {
     System.out.println("running SimpleMultithreadImplementsRunnable");
     for (int i = 0; i < NUM_THREADS; i++) {
       SimpleMultithreadImplementsRunnable runnable = new SimpleMultithreadImplementsRunnable(i);
+      Thread thread = new Thread(runnable);
+      thread.start();
+    }
+  }
+
+  public static void runSimpleMultithreadReturnsRunnable() {
+    System.out.println("running SimpleMultithreadReturnsRunnable");
+    for (int i = 0; i < NUM_THREADS; i++) {
+      Runnable runnable = SimpleMultithreadReturnsRunnable.getRunnable(i);
       Thread thread = new Thread(runnable);
       thread.start();
     }
