@@ -4,7 +4,10 @@ public class Main {
     // runSimpleMultithreadImplementsRunnable();
     // runSimpleMultithreadReturnsRunnable();
     // runClassLockExample();
-    runInstanceLockExample();
+    // runInstanceLockExample();
+    // runUserThreadExample();
+    // runDaemonThreadExampleNoJoin();
+    runDaemonThreadExampleWithJoin();
   }
 
   public static void runSimpleMultithreadExtendsThread() {
@@ -120,5 +123,26 @@ public class Main {
       }
     }
     System.out.println("safeIncrement result: " + exampleInstance.getCount());
+  }
+
+  public static void runUserThreadExample() {
+    Thread userThread = new UserDaemonThreadExample();
+    userThread.start();
+  }
+
+  public static void runDaemonThreadExampleNoJoin() {
+    Thread daemonThread = new UserDaemonThreadExample();
+    daemonThread.setDaemon(true);
+    daemonThread.start();
+  }
+
+  public static void runDaemonThreadExampleWithJoin() {
+    Thread daemonThread = new UserDaemonThreadExample();
+    daemonThread.setDaemon(true);
+    daemonThread.start();
+    try {
+      daemonThread.join();
+    } catch (InterruptedException e) {
+    }
   }
 }
