@@ -2,7 +2,7 @@ all:
 	make clean compile run
 
 clean:
-	rm *.class
+	rm -f *.class
 
 compile:
 	javac Main.java

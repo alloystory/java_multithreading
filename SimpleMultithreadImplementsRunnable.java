@@ -1,7 +1,7 @@
-public class SimpleMultithreadExtendsThread extends Thread {
+public class SimpleMultithreadImplementsRunnable implements Runnable {
   private int threadId;
 
-  public SimpleMultithreadExtendsThread(int threadId) {
+  public SimpleMultithreadImplementsRunnable(int threadId) {
     this.threadId = threadId;
   }
 
