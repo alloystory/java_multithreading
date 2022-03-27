@@ -3,7 +3,8 @@ public class Main {
     // runSimpleMultithreadExtendsThread();
     // runSimpleMultithreadImplementsRunnable();
     // runSimpleMultithreadReturnsRunnable();
-    runClassLockExample();
+    // runClassLockExample();
+    runInstanceLockExample();
   }
 
   public static void runSimpleMultithreadExtendsThread() {
@@ -74,5 +75,50 @@ public class Main {
       }
     }
     System.out.println("safeIncrement result: " + ClassLockExample.getCount());
+  }
+
+  public static void runInstanceLockExample() {
+    System.out.println("running InstanceLockExample");
+    int numThreads = 2;
+    int numIncrements = 1_000_000;
+
+    System.out.println("running unsafeIncrement, expects result = " + numThreads * numIncrements);
+    final InstanceLockExample exampleInstance = new InstanceLockExample();
+    Runnable unsafeRunnable = () -> {
+      for (int i = 0; i < numIncrements; i++)
+        exampleInstance.unsafeIncrement();
+    };
+    Thread[] unsafeThreads = new Thread[numThreads];
+    for (int i = 0; i < numThreads; i++) {
+      unsafeThreads[i] = new Thread(unsafeRunnable);
+      unsafeThreads[i].start();
+    }
+    for (Thread unsafeThread : unsafeThreads) {
+      try {
+        unsafeThread.join();
+      } catch (InterruptedException e) {
+      }
+    }
+    System.out.println("unsafeIncrement result: " + exampleInstance.getCount());
+
+    exampleInstance.reset();
+
+    System.out.println("running safeIncrement");
+    Runnable safeRunnable = () -> {
+      for (int i = 0; i < numIncrements; i++)
+        exampleInstance.safeIncrement();
+    };
+    Thread[] safeThreads = new Thread[numThreads];
+    for (int i = 0; i < numThreads; i++) {
+      safeThreads[i] = new Thread(safeRunnable);
+      safeThreads[i].start();
+    }
+    for (Thread safeThread : safeThreads) {
+      try {
+        safeThread.join();
+      } catch (InterruptedException e) {
+      }
+    }
+    System.out.println("safeIncrement result: " + exampleInstance.getCount());
   }
 }
