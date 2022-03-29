@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -131,17 +133,20 @@ public class Main {
   }
 
   public static void runUserThreadExample() {
+    System.out.println("running UserThreadExample");
     Thread userThread = new UserDaemonThreadExample();
     userThread.start();
   }
 
   public static void runDaemonThreadExampleNoJoin() {
+    System.out.println("running DaemonThreadExampleNoJoin");
     Thread daemonThread = new UserDaemonThreadExample();
     daemonThread.setDaemon(true);
     daemonThread.start();
   }
 
   public static void runDaemonThreadExampleWithJoin() {
+    System.out.println("running DaemonThreadExampleWithJoin");
     Thread daemonThread = new UserDaemonThreadExample();
     daemonThread.setDaemon(true);
     daemonThread.start();
@@ -152,13 +157,24 @@ public class Main {
   }
 
   public static void runThreadPoolExample() {
-    ExecutorService executor = Executors.newFixedThreadPool(10);
-    for (int i = 0; i < 50; i++) {
-      Future future = executor.submit(new ThreadPoolTask(i));
+    System.out.println("running ThreadPoolExample");
+    ExecutorService executor = Executors.newFixedThreadPool(15);
+    // for (int i = 0; i < 50; i++) {
+    // Future future = executor.submit(new ThreadPoolTask(i));
 
-      if (i % 2 == 0)
-        future.cancel(false);
+    // if (i % 2 == 0)
+    // future.cancel(false);
+    // }
+
+    List<ThreadPoolTask> tasks = new ArrayList<>();
+    for (int i = 0; i < 50; i++) {
+      tasks.add(new ThreadPoolTask(i));
     }
+    try {
+      executor.invokeAll(tasks);
+    } catch (InterruptedException e) {
+    }
+
     executor.shutdown();
   }
 }
